@@ -1,0 +1,28 @@
+server:
+  port: 8070
+spring:
+  application:
+    name: msvc-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: books
+          uri: http://localhost:8090
+          predicates:
+            - Path=/api/library/**
+        - id: export
+          uri: http://localhost:9090
+          predicates:
+            - Path=/api/export/**
+#eureka:
+#  client:
+#    register-with-eureka: false
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway: DEBUG

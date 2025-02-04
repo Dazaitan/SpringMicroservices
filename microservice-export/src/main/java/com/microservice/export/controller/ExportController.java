@@ -16,17 +16,13 @@ public class ExportController {
     @Autowired
     private ExportService exportService;
 
-//    @GetMapping("/books")
-//    public ResponseEntity<String> exportBooks(@RequestParam String filename) {
-//        /try {
-//            exportService.exportBooksToCSV(filename);
-//            return ResponseEntity.ok("Export successful to " + filename);
-//        } catch (IOException e) {
-//            return ResponseEntity.status(500).body("Error during export: " + e.getMessage());
-//        }
-//    }
     @GetMapping("/books")
-    public String export(){
-        return "Accedío al endpoint";
+    public ResponseEntity<String> exportBooks(@RequestParam String filename) {
+        try {
+            exportService.exportBooksToCSV(filename);
+            return ResponseEntity.ok("Export successful to " + filename);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Error during export: " + e.getMessage());
+        }
     }
 }

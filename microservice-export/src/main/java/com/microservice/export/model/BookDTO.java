@@ -3,9 +3,8 @@ package com.microservice.export.model;
 import lombok.Data;
 
 @Data
-public class Book {
+public class BookDTO {
     private int id;
-
     private String title;
     private String author;
     private String genre;

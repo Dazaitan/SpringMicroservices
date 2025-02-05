@@ -14,8 +14,8 @@ import java.util.Optional;
 public class BookService {
     @Autowired
     private BookRepository bookRepository;
-    public void addBook(Book book) {
-        bookRepository.save(book);
+    public Book addBook(Book book) {
+        return bookRepository.save(book);
     }
 
     public void removeBook(Integer id) {
@@ -41,23 +41,9 @@ public class BookService {
     public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
-    public Optional<Book> getBookById(Integer id){
-        return bookRepository.findById(id);
-    }
-    public void exportToCSV(String filename) throws IOException {
-        List<Book> books = bookRepository.findAll();
-        FileWriter writer = new FileWriter(filename);
 
-        writer.append("Title,Author,Genre,Category,Rating\n");
-        for (Book book : books) {
-            writer.append(book.getTitle()).append(",");
-            writer.append(book.getAuthor()).append(",");
-            writer.append(book.getGenre()).append(",");
-            writer.append(book.getCategory()).append(",");
-            writer.append(String.valueOf(book.getRating())).append("\n");
-        }
-
-        writer.flush();
-        writer.close();
+    public Book getBookById(Integer id){
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Libro no encontrado con el ID " + id));
     }
 }

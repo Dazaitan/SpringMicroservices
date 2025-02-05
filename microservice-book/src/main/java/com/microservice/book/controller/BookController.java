@@ -2,6 +2,7 @@ package com.microservice.book.controller;
 
 import com.microservice.book.model.Book;
 import com.microservice.book.services.BookService;
+import com.microservice.book.services.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,17 +19,37 @@ public class BookController {
     private BookService bookService;
 
     @PostMapping("/add")
-    public void addBook(@RequestBody Book book){
-        bookService.addBook(book);
+    public ResponseEntity<?> addBook(@RequestBody Book book){
+        try {
+            Book savedBook = bookService.addBook(book);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedBook);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Datos del libro no válidos: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Se produjo un error al guardar el libro: " + e.getMessage());
+        }
     }
     @DeleteMapping("/remove/{id}")
-    public void removeBook(@PathVariable Integer id) {
-        bookService.removeBook(id);
+    public ResponseEntity<?> removeBook(@PathVariable Integer id) {
+        try {
+            bookService.removeBook(id);
+            return ResponseEntity.ok().body("El libro ha sido eliminado exitosamente.");
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Se produjo un error al intentar eliminar el libro.");
+        }
     }
     @GetMapping("/book/{id}")
-    public ResponseEntity<Book> searchBookById(@PathVariable Integer id) {
-        Optional<Book> book= bookService.getBookById(id);
-        return book.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    public ResponseEntity<?> searchBookById(@PathVariable Integer id) {
+        try {
+            Book book = bookService.getBookById(id);
+            return ResponseEntity.ok().body(book);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Se produjo un error al obtener la información del libro.");
+        }
     }
     @GetMapping("/search")
     public List<Book> searchBooks(@RequestParam(required = false) String author,
@@ -39,14 +60,5 @@ public class BookController {
     @GetMapping("/all")
     public List<Book> getAllBooks() {
         return bookService.getAllBooks();
-    }
-    @GetMapping("/export")
-    public String exportInventory(@RequestParam String filename) {
-        try {
-            bookService.exportToCSV(filename);
-            return "Exportacion exitosa a " + filename;
-        } catch (IOException e) {
-            return "Error durante la exportacion: " + e.getMessage();
-        }
     }
 }

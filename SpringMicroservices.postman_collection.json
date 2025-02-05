@@ -1,0 +1,266 @@
+{
+	"info": {
+		"_postman_id": "ada3322b-0efa-4c27-b0a3-fb260d87eb6e",
+		"name": "SpringMicroservices",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" alt=\"\" height=\"1530\" width=\"2162\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40951832"
+	},
+	"item": [
+		{
+			"name": "Exportar archivo CSV",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8070/api/export/books?filename={name}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"export",
+						"books"
+					],
+					"query": [
+						{
+							"key": "filename",
+							"value": "{name}"
+						}
+					]
+				},
+				"description": "**Método HTTP:** GET\n\n**Descripción:** Este endpoint permite exportar un archivo CSV con todos los libros almacenados en la base de datos.\n\n## Cuerpo de la Solicitud\n\n```\nGET /api/export-books-csv\n\n ```\n\n## Parámetros de Consulta\n\n`filename`: El nombre del archivo CSV que se generará. Si no se proporciona, se utilizará un nombre predeterminado.\n\n## Respuesta\n\n**Código de Estado:** 200 OK\n\n**Cabecera de la Respuesta:**\n\n- `Content-Type: text/csv`\n    \n- `Content-Disposition: attachment; filename={name}.csv` (donde `{name}` es el valor proporcionado en el parámetro de consulta `filename`)\n    \n- En este contexto se guardara el archivo en la ruta donde se esta ejecutando el microservicio"
+			},
+			"response": []
+		},
+		{
+			"name": "Agregar nuevo libro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"title\",\n    \"author\": \"author\",\n    \"genre\": \"genre\",\n    \"category\": \"category\",\n    \"rating\": 0.0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8070/api/library/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"library",
+						"add"
+					]
+				},
+				"description": "**Endpoint:** `http://localhost:8070/api/books/add`\n\n**Método HTTP:** POST\n\n**Descripción:** Este endpoint permite añadir un nuevo libro a la base de datos.\n\n## Ejemplo de Solicitud\n\nhttp\n\n```\nPOST http://localhost:8070/api/books/add\nContent-Type: application/json\n{\n    \"title\": \"El Quijote\",\n    \"author\": \"Miguel de Cervantes\",\n    \"genre\": \"Ficción\",\n    \"category\": \"Novela\",\n    \"rating\": 4.5\n}\n\n ```\n\n## Cuerpo de la solicitud\n\nEl cuerpo de la solicitud debe contener un objeto JSON con la siguiente estructura:\n\n- `title` (string, obligatorio): Título del libro.\n    \n- `author` (string, obligatorio): Autor del libro.\n    \n- `genre` (string, obligatorio): Género del libro.\n    \n- `category` (string, obligatorio): Categoría del libro.\n    \n- `rating` (float, obligatorio): Calificación del libro.\n    \n\n## Respuesta Exitosa\n\n**Código de Estado:** 201 Created\n\n**Cuerpo de la Respuesta:**\n\n``` json\n{\n    \"id\": {id},\n    \"title\": \"El Quijote\",\n    \"author\": \"Miguel de Cervantes\",\n    \"genre\": \"Ficción\",\n    \"category\": \"Novela\",\n    \"rating\": 4.5\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar libro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful DELETE request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 202, 204]);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8070/api/library/remove/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"library",
+						"remove",
+						"{{id}}"
+					]
+				},
+				"description": "**Endpoint:** `http://localhost:8070/api/library/remove/{{id}}`\n\n**Método HTTP:** DELETE\n\n**Descripción:** Este endpoint permite eliminar un libro de la base de datos utilizando su identificador único (ID).\n\n## Ejemplo de Solicitud\n\nhttp\n\n```\nDELETE http://localhost:8070/api/library/remove/1\n\n ```\n\n## Parámetros de Ruta\n\n- `id` (obligatorio): Identificador único del libro que se desea eliminar.\n    \n\nStartFragment\n\n## Respuesta Exitosa\n\n**Código de Estado:** 200 OK\n\n**Cuerpo de la Respuesta:**\n\njson\n\n```\n\"El libro ha sido eliminado exitosamente.\"\n\n ```\n\n## Respuestas de Error\n\n**Código de Estado:** 404 Not Found\n\n- **Descripción:** No se encontró un libro con el ID proporcionado.\n    \n- **Cuerpo de la Respuesta:**\n    \n\n```\n\"Libro no encontrado con el ID 3\"\n\n ```\n\n**Código de Estado:** 500 Internal Server Error\n\n- **Descripción:** Se produjo un error al intentar eliminar el libro."
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener todos los libros",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8070/api/library/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"library",
+						"all"
+					]
+				},
+				"description": "**Endpoint:** `http://localhost:8070/api/library/all`\n\n**Método HTTP:** GET\n\n**Descripción:** Este endpoint permite obtener una lista de todos los libros almacenados en la base de datos de la biblioteca.\n\n## Ejemplo de Solicitud\n\n```\nGET http://localhost:8070/api/library/all\n\n ```\n\n## Parámetros de Consulta\n\nEste endpoint no requiere parámetros de consulta adicionales.\n\n## Respuesta Exitosa\n\n**Código de Estado:** 200 OK\n\n**Cuerpo de la Respuesta:**\n\n``` json\n[\n    {\n        \"id\": 1,\n        \"title\": \"Noches blancas\",\n        \"author\": \"Fiódor Dostoyevski\",\n        \"genre\": \"Ficcion literaria\",\n        \"category\": \"Ficcion literaria\",\n        \"rating\": 5.0\n    },\n    {\n        \"id\": 2,\n        \"title\": \"Noches blancas\",\n        \"author\": \"Fiódor Dostoyevski\",\n        \"genre\": \"Ficcion literaria\",\n        \"category\": \"Ficcion literaria\",\n        \"rating\": 5.0\n    }\n]\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar libro por categoria, autor o genero",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8070/api/library/search?author={AuthorName}&genre={GenreName}&category={CategoryName}\n",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"library",
+						"search"
+					],
+					"query": [
+						{
+							"key": "author",
+							"value": "{AuthorName}"
+						},
+						{
+							"key": "genre",
+							"value": "{GenreName}"
+						},
+						{
+							"key": "category",
+							"value": "{CategoryName}\n"
+						}
+					]
+				},
+				"description": "**Endpoint:** `http://localhost:8070/api/library/search`\n\n**Método HTTP:** GET\n\n**Descripción:** Este endpoint permite buscar libros en la base de datos de la biblioteca filtrando por autor, género y categoría.\n\n## Ejemplo de Solicitud\n\nhttp\n\n```\nGET http://localhost:8070/api/library/search?author=Fiódor Dostoyevski\n\n ```\n\n## Parámetros de Consulta\n\n- `author` (opcional): Nombre del autor del libro. Se puede proporcionar una parte del nombre o el nombre completo.\n    \n- `genre` (opcional): Género del libro.\n    \n- `category` (opcional): Categoría del libro.\n    \n\n**Nota:** Se pueden utilizar uno de estos parámetros de consulta para filtrar los resultados.\n\n## Respuesta Exitosa\n\n**Código de Estado:** 200 OK\n\n**Cuerpo de la Respuesta:**\n\njson\n\n```\n[\n    {\n        \"id\": 1,\n        \"title\": \"El Quijote\",\n        \"author\": \"Miguel de Cervantes\",\n        \"genre\": \"Ficción\",\n        \"category\": \"Novela\",\n        \"rating\": 4.5\n    },\n    {\n        \"id\": 2,\n        \"title\": \"Cien Años de Soledad\",\n        \"author\": \"Gabriel García Márquez\",\n        \"genre\": \"Ficción\",\n        \"category\": \"Novela\",\n        \"rating\": 4.8\n    }\n    ...\n]\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar libro por ID",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8070/api/library/book/{{id}}\n",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8070",
+					"path": [
+						"api",
+						"library",
+						"book",
+						"{{id}}\n"
+					]
+				},
+				"description": "StartFragment\n\n**Endpoint:** `http://localhost:8070/api/library/book/{{id}}`\n\n**Método HTTP:** GET\n\n**Descripción:** Este endpoint permite obtener información detallada sobre un libro específico almacenado en la base de datos de la biblioteca, utilizando su identificador único (ID).\n\n## Ejemplo de Solicitud\n\nhttp\n\n```\nGET http://localhost:8070/api/library/book/1\n\n ```\n\n## Parámetros de Ruta\n\n- `id` (obligatorio): Identificador único del libro que se desea obtener.\n    \n\n## Respuesta Exitosa\n\n**Código de Estado:** 200 OK\n\n**Cuerpo de la Respuesta:**\n\njson\n\n``` json\n{\n    \"id\": 1,\n    \"title\": \"El Quijote\",\n    \"author\": \"Miguel de Cervantes\",\n    \"genre\": \"Ficción\",\n    \"category\": \"Novela\",\n    \"rating\": 4.5\n}\n\n ```\n\n## Respuestas de Error\n\n- **Descripción:** No se encontró un libro con el ID proporcionado.\n    \n- **Cuerpo de la Respuesta:**\n    \n\n```\nLibro no encontrado con el ID {id}\n\n ```\n\n- **Código de Estado:** 500 Internal Server Error\n    \n    - **Descripción:** Se produjo un error al obtener la información del libro."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}

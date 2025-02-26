@@ -4,4 +4,13 @@ spring:
   application:
     name: msvc-export
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://msvc-config:8888
+eureka:
+  instance:
+    hostname: msvc-eureka
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+  client:
+    service-url:
+      defaultZone: http://msvc-eureka:8761/eureka

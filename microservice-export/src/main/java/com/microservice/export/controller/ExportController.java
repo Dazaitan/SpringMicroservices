@@ -25,4 +25,8 @@ public class ExportController {
             return ResponseEntity.status(500).body("Error during export: " + e.getMessage());
         }
     }
+    @GetMapping("/pruebas")
+    public String pruebasAcces(){
+        return "Pruebas 123";
+    }
 }

@@ -10,11 +10,11 @@ spring:
           enabled: true
       routes:
         - id: books
-          uri: http://localhost:8090
+          uri: http://msvc-book:8090
           predicates:
             - Path=/api/library/**
         - id: export
-          uri: http://localhost:9090
+          uri: http://msvc-export:9090
           predicates:
             - Path=/api/export/**
 #eureka:
@@ -26,3 +26,7 @@ logging:
       springframework:
         cloud:
           gateway: DEBUG
+eureka:
+  client:
+    service-url:
+      defaultZone: http://msvc-eureka:8761/eureka

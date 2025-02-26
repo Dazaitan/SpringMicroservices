@@ -16,7 +16,7 @@ public class ExportService {
     private RestTemplate restTemplate;
 
     public List<BookDTO> fetchBooksFromBookService() {
-        String url = "http://localhost:8070/api/library/all";
+        String url = "http://msvc-gateway:8070/api/library/all";
         BookDTO[] booksArray = restTemplate.getForObject(url, BookDTO[].class);
         return Arrays.asList(booksArray);
     }

@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+  msvc-config:
+    image: 'msvc-config'
+    container_name: msvc-config
+    env_file:
+      - varenv.env
+    ports:
+      - "8888:8888"
+    networks:
+      - microservices-network
+  msvc-eureka:
+    image: 'msvc-eureka'
+    container_name: msvc-eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - microservices-network
+    depends_on:
+      - msvc-config
+  msvc-book:
+    image: 'msvc-book'
+    container_name: msvc-book
+    ports:
+      - "8090:8090"
+    networks:
+      - microservices-network
+    depends_on:
+      - msvc-config
+  msvc-export:
+    image: 'msvc-export'
+    container_name: msvc-export
+    env_file:
+      - varenv.env
+    ports:
+      - "9090:9090"
+    networks:
+      - microservices-network
+  msvc-gateway:
+    image: 'msvc-gateway'
+    container_name: msvc-gateway
+    ports:
+      - "8070:8070"
+    networks:
+      - microservices-network
+    depends_on:
+      - msvc-eureka
+networks:
+  microservices-network:
+    external: true

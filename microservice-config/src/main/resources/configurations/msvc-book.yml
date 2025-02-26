@@ -4,9 +4,9 @@ spring:
     name: msvc-book
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://postgres-db:5432/bd_library
-    username: postgres
-    password: pruebas
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,4 +17,4 @@ eureka:
     hostname: msvc-eureka
   client:
     service-url:
-      defaultZone: http://msvc-eureka:8761/eureka
+      defaultZone: ${EUREKA_SERVER_URL}
